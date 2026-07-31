@@ -24,14 +24,19 @@ ctot = 1e4
 # Initial condition
 print("Setting up initial condition")
 
+# Steady state values
+a1ss=5000
+m1ss=86.0367
+m0ss=1.96559
+
 # (Random perturbation)
-a1 = 5000 + 1e-2 * np.random.rand(space, space)
-m1 = 86.0367 + 1e-2 * np.random.rand(space, space)
-m0 = 1.96559 + 1e-2 * np.random.rand(space, space)
-d = (ctot-a1-m1) + 1e-2 * np.random.rand(space, space) 
+a1 = a1ss + a1ss* 1e-3 * np.random.rand(space, space)
+m1 = m1ss + m1ss* 1e-3 * np.random.rand(space, space)
+m0 = m0ss + m0ss* 1e-3 * np.random.rand(space, space)
+d  = (ctot - a1 - m1) + (ctot-a1ss-m1ss)* 1e-3 * np.random.rand(space, space)
 
 # (Gaussian perturbation)
-a1 = 5000 + np.zeros((space, space))
+a1 = a1ss + np.zeros((space, space))
 xc = (space*dx)/2 
 yc = (space*dx)/2 
 inv_sigma = 0.5
@@ -39,8 +44,8 @@ for i in range(space):
     for j in range (space):
         x = i*dx
         y = j*dx
-        m1[i,j] = 0.086*np.exp(- ((x-xc)**2 + (y-yc)**2)/2*inv_sigma**2) + 86.0367
-        m0[i,j] =0.0019*np.exp(- ((x-xc)**2 + (y-yc)**2)/2*inv_sigma**2) + 1.96559
+        m1[i,j] = m1ss * 1e-3 * np.exp(- ((x-xc)**2 + (y-yc)**2)/2*inv_sigma**2) + m1ss
+        m0[i,j] = m0ss * 1e-3 * np.exp(- ((x-xc)**2 + (y-yc)**2)/2*inv_sigma**2) + m0ss
 d = (ctot-a1-m1) + np.zeros((space, space))
 
 d1 = 1 # Monomer diffusion coefficient
